@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="751.0" prefWidth="1414.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HelloController">
+   <left>
+      <VBox prefHeight="751.0" prefWidth="403.0" style="-fx-background-color: #0D1824;" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#Home" prefHeight="62.0" prefWidth="406.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="Home" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#linkedGraphOnAction" prefHeight="62.0" prefWidth="411.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="Linked Graph" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="134.0" mnemonicParsing="false" onAction="#directedGraphOnAction" prefHeight="62.0" prefWidth="403.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="Directed Graph" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="135.0" mnemonicParsing="false" onAction="#linkedGraphOperationsOnAction" prefHeight="62.0" prefWidth="413.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="Linked Graph Operations" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="197.0" mnemonicParsing="false" onAction="#directedGraphOperationsOnAction" prefHeight="62.0" prefWidth="399.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="Directed Graph Operations" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="260.0" mnemonicParsing="false" onAction="#mstOnAction" prefHeight="62.0" prefWidth="399.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="MST (Kruskal / Prim)" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="320.0" mnemonicParsing="false" onAction="#shortestPathOnAction" prefHeight="62.0" prefWidth="399.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="Shortest Path (Dijkstra)" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Button>
+            <Button layoutX="10.0" layoutY="196.0" mnemonicParsing="false" onAction="#Exit" prefHeight="62.0" prefWidth="403.0" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-width: 0px 0px 2px 0px;" text="Exit" textFill="WHITE">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <AnchorPane fx:id="ap" prefHeight="716.0" prefWidth="1013.0" style="-fx-background-color: #141428;" BorderPane.alignment="CENTER">
+         <children>
+            <Text fx:id="txtMessage" fill="#f7f7f7" layoutX="2.0" layoutY="389.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Laboratory No. 11" textAlignment="CENTER" wrappingWidth="1007.1488647460938">
+               <font>
+                  <Font name="Arial" size="40.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
