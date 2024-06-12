@@ -1,6 +1,5 @@
 package controller;
 
-import domain.AdjacencyMatrixGraph;
 import domain.GraphException;
 import domain.SinglyLinkedListGraph;
 import domain.Vertex;

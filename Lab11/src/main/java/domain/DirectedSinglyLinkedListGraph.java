@@ -6,6 +6,9 @@ import domain.queue.LinkedQueue;
 import domain.queue.QueueException;
 import domain.stack.LinkedStack;
 import domain.stack.StackException;
+import javafx.util.Pair;
+
+import java.util.*;
 
 public class DirectedSinglyLinkedListGraph implements Graph {
     private SinglyLinkedList vertexList;
@@ -234,6 +237,101 @@ public class DirectedSinglyLinkedListGraph implements Graph {
         }
         return -1;
     }
+
+    private Vertex findVertex(Object data) throws ListException {
+        for (int i = 1; i <= vertexList.size(); i++) {
+            Vertex vertex = (Vertex) vertexList.getNode(i).data;
+            if (vertex.data.equals(data)) {
+                return vertex;
+            }
+        }
+        return null;
+    }
+
+
+    public String shortestPath(Object start, Object end) throws GraphException, ListException {
+        if (!containsVertex(start) || !containsVertex(end)) {
+            throw new GraphException("One or both vertices not found.");
+        }
+
+        Map<Object, Integer> distances = new HashMap<>();
+        Map<Object, Object> predecessors = new HashMap<>();
+        Set<Object> visited = new HashSet<>();
+
+        for (int i = 1; i <= vertexList.size(); i++) {
+            Vertex vertex = (Vertex) vertexList.getNode(i).data;
+            distances.put(vertex.data, Integer.MAX_VALUE);
+        }
+
+        distances.put(start, 0);
+        Queue<Object> queue = new LinkedList<>();
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            Object current = queue.poll();
+            visited.add(current);
+
+            Vertex vertex = findVertex(current);
+            for (int i = 1; i <= vertex.edgesList.size(); i++) {
+                EdgeWeight edge = (EdgeWeight) vertex.edgesList.getNode(i).data;
+                Object neighbor = edge.getEdge();
+
+                if (!visited.contains(neighbor)) {
+                    int newDistance = distances.get(current) + (int) edge.getWeight();
+                    if (newDistance < distances.get(neighbor)) {
+                        distances.put(neighbor, newDistance);
+                        predecessors.put(neighbor, current);
+                        queue.add(neighbor);
+                    }
+                }
+            }
+        }
+
+        Object current = end;
+        StringBuilder path = new StringBuilder();
+        while (current != null) {
+            path.insert(0, current + " ");
+            current = predecessors.get(current);
+        }
+        return path.toString().trim();
+    }
+
+    @Override
+    public List<Pair<Integer, Integer>> getNeighbors(int vertex) throws GraphException, ListException {
+        if (isEmpty()) {
+            throw new GraphException("Directed Singly Linked List Graph is empty");
+        }
+        if (vertex < 1 || vertex > vertexList.size()) {
+            throw new GraphException("Invalid vertex index");
+        }
+
+        List<Pair<Integer, Integer>> neighbors = new ArrayList<>();
+        Vertex v = (Vertex) vertexList.getNode(vertex).data;
+
+        for (int i = 1; i <= v.edgesList.size(); i++) {
+            EdgeWeight edge = (EdgeWeight) v.edgesList.getNode(i).data;
+            int neighborIndex = indexOf(edge.getEdge());
+            neighbors.add(new Pair<>(neighborIndex, edge.getWeight() != null ? (Integer) edge.getWeight() : 1));
+        }
+
+        return neighbors;
+    }
+
+    @Override
+    public List<Object> getVertices() throws ListException {
+        return List.of();
+    }
+
+    private int indexOf(Object value) throws ListException {
+        for (int i = 1; i <= vertexList.size(); i++) {
+            Vertex vertex = (Vertex) vertexList.getNode(i).data;
+            if (util.Utility.compare(vertex.data, value) == 0)
+                return i;
+        }
+        return -1; // not found
+    }
+
+
 
     @Override
     public String toString() {

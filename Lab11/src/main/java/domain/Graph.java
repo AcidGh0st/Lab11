@@ -3,6 +3,9 @@ package domain;
 import domain.list.ListException;
 import domain.queue.QueueException;
 import domain.stack.StackException;
+import javafx.util.Pair;
+
+import java.util.List;
 
 public interface Graph {
     // devuelve el número de vértices que tiene el grafo
@@ -13,13 +16,13 @@ public interface Graph {
     public boolean isEmpty();
     // true si el vértice indicado forma parte del grafo
     public boolean containsVertex(Object element)throws GraphException, ListException;
-    // true si existe una artista que une los dos vértices indicados
+    // true si existe una arista que une los dos vértices indicados
     public boolean containsEdge(Object a, Object b)throws GraphException, ListException;
     //agrega un vértice al grafo
     public void addVertex(Object element)throws GraphException, ListException;
-    //agrega una artista que permita unir dos vértices (el grafo es no dirigido)
+    //agrega una arista que permita unir dos vértices (el grafo es no dirigido)
     public void addEdge(Object a, Object b)throws GraphException, ListException;
-    //agrega peso a una artista que une dos vértices (el grafo es no dirigido)
+    //agrega peso a una arista que une dos vértices (el grafo es no dirigido)
     public void addWeight(Object a, Object b, Object weight)throws GraphException, ListException;
     //agrega una arista y un peso entre dos vértices
     public void addEdgeWeight(Object a, Object b, Object weight)throws GraphException, ListException;
@@ -33,4 +36,8 @@ public interface Graph {
     //recorre el grafo utilizando el algoritmo de búsqueda en amplitud
     //breadth-first search
     public String bfs()throws GraphException, QueueException, ListException;
+    String shortestPath(Object start, Object end) throws GraphException, ListException;
+    List<Pair<Integer, Integer>> getNeighbors(int vertex) throws GraphException, ListException;
+    // Retorna una lista de todos los vértices presentes en el grafo
+    public List<Object> getVertices() throws ListException;
 }

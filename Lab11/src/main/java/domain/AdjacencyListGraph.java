@@ -5,6 +5,9 @@ import domain.queue.LinkedQueue;
 import domain.queue.QueueException;
 import domain.stack.LinkedStack;
 import domain.stack.StackException;
+import javafx.util.Pair;
+
+import java.util.*;
 
 public class AdjacencyListGraph implements Graph {
     private int n;
@@ -220,6 +223,85 @@ public class AdjacencyListGraph implements Graph {
         }//for i
         return -1;
     }
+
+    public String shortestPath(Object start, Object end) throws GraphException, ListException {
+        if (!containsVertex(start) || !containsVertex(end)) {
+            throw new GraphException("One or both vertices not found.");
+        }
+
+        Map<Object, Integer> distances = new HashMap<>();
+        Set<Object> visited = new HashSet<>();
+        Map<Object, Object> predecessors = new HashMap<>();
+
+        for (Vertex vertex : vertexList) {
+            if (vertex != null) {
+                distances.put(vertex.data, Integer.MAX_VALUE);
+            }
+        }
+        distances.put(start, 0);
+
+        PriorityQueue<Object> queue = new PriorityQueue<>(Comparator.comparingInt(distances::get));
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            Object current = queue.poll();
+            if (visited.contains(current)) continue;
+            visited.add(current);
+
+            Vertex vertex = vertexList[indexOf(current)];
+            for (int i = 1; i <= vertex.edgesList.size(); i++) {
+                EdgeWeight edge = (EdgeWeight) vertex.edgesList.getNode(i).data;
+                Object neighbor = edge.getEdge();
+                if (visited.contains(neighbor)) continue;
+
+                int newDist = distances.get(current) + (int) edge.getWeight();
+                if (newDist < distances.get(neighbor)) {
+                    distances.put(neighbor, newDist);
+                    predecessors.put(neighbor, current);
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        StringBuilder path = new StringBuilder();
+        for (Object at = end; at != null; at = predecessors.get(at)) {
+            path.insert(0, at + " ");
+        }
+
+        return path.toString().trim();
+    }
+
+    @Override
+    public List<Pair<Integer, Integer>> getNeighbors(int vertex) throws GraphException, ListException {
+        if (vertex < 0 || vertex >= counter) {
+            throw new GraphException("Vertex index out of bounds.");
+        }
+
+        List<Pair<Integer, Integer>> neighbors = new ArrayList<>();
+        Vertex v = vertexList[vertex];
+        if (v != null && !v.edgesList.isEmpty()) {
+            for (int i = 1; i <= v.edgesList.size(); i++) {
+                EdgeWeight edge = (EdgeWeight) v.edgesList.getNode(i).data;
+                int neighborIndex = indexOf(edge.getEdge());
+                if (neighborIndex != -1) {
+                    neighbors.add(new Pair<>(neighborIndex, (Integer) edge.getWeight()));
+                }
+            }
+        }
+
+        return neighbors;
+    }
+
+    @Override
+    public List<Object> getVertices() throws ListException {
+        List<Object> vertices = new ArrayList<>();
+        for (int i = 0; i < counter; i++) {
+            vertices.add(vertexList[i].data);
+        }
+        return vertices;
+    }
+
+
 
     @Override
     public String toString() {

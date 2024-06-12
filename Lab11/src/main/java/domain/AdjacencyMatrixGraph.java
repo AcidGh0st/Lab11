@@ -5,6 +5,11 @@ import domain.queue.LinkedQueue;
 import domain.queue.QueueException;
 import domain.stack.LinkedStack;
 import domain.stack.StackException;
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AdjacencyMatrixGraph implements Graph {
     private int n;
@@ -57,9 +62,9 @@ public class AdjacencyMatrixGraph implements Graph {
 
     @Override
     public boolean containsVertex(Object element) throws GraphException, ListException {
-       if(isEmpty()){
-           throw new GraphException("Adjacency Matrix Graph is empty");
-       }
+        if(isEmpty()){
+            throw new GraphException("Adjacency Matrix Graph is empty");
+        }
         for (int i = 0; i < counter; i++) {
             if(util.Utility.compare(vertexList[i].data, element)==0)
                 return true;
@@ -224,6 +229,89 @@ public class AdjacencyMatrixGraph implements Graph {
         }//for i
         return -1;
     }
+
+    public String shortestPath(Object start, Object end) throws GraphException, ListException {
+        if (!containsVertex(start) || !containsVertex(end)) {
+            throw new GraphException("One or both vertices not found.");
+        }
+
+        int startIndex = indexOf(start);
+        int endIndex = indexOf(end);
+        int[] dist = new int[n];
+        boolean[] visited = new boolean[n];
+        int[] prev = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[startIndex] = 0;
+
+        for (int i = 0; i < n; i++) {
+            int u = -1;
+            for (int j = 0; j < n; j++) {
+                if (!visited[j] && (u == -1 || dist[j] < dist[u])) {
+                    u = j;
+                }
+            }
+            if (dist[u] == Integer.MAX_VALUE) break;
+            visited[u] = true;
+
+            for (int v = 0; v < n; v++) {
+                if (adjacencyMatrix[u][v] != null && !visited[v]) {
+                    int newDist = dist[u] + (int) adjacencyMatrix[u][v];
+                    if (newDist < dist[v]) {
+                        dist[v] = newDist;
+                        prev[v] = u;
+                    }
+                }
+            }
+        }
+
+        StringBuilder path = new StringBuilder();
+        for (int at = endIndex; at != startIndex; at = prev[at]) {
+            path.insert(0, vertexList[at] + " ");
+        }
+        path.insert(0, vertexList[startIndex] + " ");
+        return path.toString().trim();
+    }
+
+    @Override
+    public List<Pair<Integer, Integer>> getNeighbors(int vertex) throws GraphException, ListException {
+        if (isEmpty()) {
+            throw new GraphException("Adjacency Matrix Graph is empty");
+        }
+        if (vertex < 0 || vertex >= counter) {
+            throw new GraphException("Invalid vertex index: " + vertex);
+        }
+
+        List<Pair<Integer, Integer>> neighbors = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            if (adjacencyMatrix[vertex][i] != null && !adjacencyMatrix[vertex][i].equals(0)) {
+                if (adjacencyMatrix[vertex][i] instanceof Integer) {
+                    neighbors.add(new Pair<>(i, (Integer) adjacencyMatrix[vertex][i]));
+                } else {
+                    throw new GraphException("Invalid weight type at adjacencyMatrix[" + vertex + "][" + i + "]");
+                }
+            }
+        }
+
+        return neighbors;
+    }
+
+
+
+
+
+
+
+    @Override
+    public List<Object> getVertices() throws ListException {
+        List<Object> vertices = new ArrayList<>();
+        for (int i = 0; i < counter; i++) {
+            vertices.add(vertexList[i].data);
+        }
+        return vertices;
+    }
+
+
 
     @Override
     public String toString() {

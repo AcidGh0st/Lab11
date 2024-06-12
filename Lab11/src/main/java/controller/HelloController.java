@@ -45,17 +45,17 @@ public class HelloController {
 
     @FXML
     void directedGraphOperationsOnAction(ActionEvent event) {
-        loadPage("directedGraphOperations.fxml");
+        loadPage("DirectedGraphOperations.fxml");
     }
 
     @FXML
     void linkedGraphOnAction(ActionEvent event) {
-        loadPage("linkedGraph.fxml");
+        loadPage("Linked_Graph.fxml");
     }
 
     @FXML
     void linkedGraphOperationsOnAction(ActionEvent event) {
-        loadPage("linkedGraphOperations.fxml");
+        loadPage("LinkedGraphOperations.fxml");
     }
 
     @FXML
