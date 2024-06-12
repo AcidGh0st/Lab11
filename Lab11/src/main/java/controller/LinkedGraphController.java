@@ -1,9 +1,9 @@
 package controller;
 
+import domain.EdgeWeight;
 import domain.GraphException;
 import domain.SinglyLinkedListGraph;
 import domain.Vertex;
-import domain.EdgeWeight;
 import domain.list.ListException;
 import domain.queue.QueueException;
 import domain.stack.StackException;
@@ -19,11 +19,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class LinkedGraphController {
     @FXML
@@ -37,33 +34,56 @@ public class LinkedGraphController {
 
     private SinglyLinkedListGraph graph;
     private Map<String, Circle> vertexMap; // Mapa para almacenar los vértices y sus posiciones
+    private String[] vertexNames;
 
     @FXML
     public void initialize() {
         graph = new SinglyLinkedListGraph();
         vertexMap = new HashMap<>();
+        vertexNames = new String[]{"Einstein", "Newton", "Curie", "Galileo", "Tesla",
+                "Da Vinci", "Aristóteles", "Darwin", "Hawking", "Edison", "Jackson", "Pasteur", "Copernico", "Fleming",
+                "Mendel", "Schrödinger", "Ochoa", "Nobel", "Pitágoras", "Dalton", "Descartes", "Franklin", "Linneo"};
 
         try {
-            String[] vertices = {"Einstein", "Newton", "Curie", "Galileo", "Tesla",
-                    "Da Vinci", "Aristóteles", "Darwin", "Hawking", "Edison"};
+            initializeGraph();
+            drawGraph(); // Dibujar el grafo
+        } catch (GraphException | ListException e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Inicializar el grafo con los vértices
-            for (String vertex : vertices) {
-                graph.addVertex(vertex);
-            }
+    private void initializeGraph() throws GraphException, ListException {
+        // Limpiar el grafo existente
+        graph.clear();
 
-            // Agregar aristas con conexiones aleatorias
-            Random random = new Random();
-            for (String vertex1 : vertices) {
-                for (String vertex2 : vertices) {
-                    // Agregar una arista con una probabilidad del 30%
-                    if (!vertex1.equals(vertex2) && random.nextDouble() < 0.3) {
-                        graph.addEdgeWeight(vertex1, vertex2, random.nextInt(1001) + 1000);
-                    }
+        // Mezclar los nombres y seleccionar los primeros 10
+        List<String> namesList = Arrays.asList(vertexNames);
+        Collections.shuffle(namesList);
+        List<String> selectedNames = namesList.subList(0, 10);
+
+        // Inicializar el grafo con los vértices seleccionados
+        for (String vertex : selectedNames) {
+            graph.addVertex(vertex);
+        }
+
+        // Agregar aristas con conexiones aleatorias
+        Random random = new Random();
+        for (String vertex1 : selectedNames) {
+            for (String vertex2 : selectedNames) {
+                // Agregar una arista con una probabilidad del 30%
+                if (!vertex1.equals(vertex2) && random.nextDouble() < 0.3) {
+                    graph.addEdgeWeight(vertex1, vertex2, random.nextInt(1001) + 1000);
                 }
             }
+        }
+    }
 
-            drawGraph(); // Dibujar el grafo
+    @FXML
+    public void RandomizeOnAction(ActionEvent actionEvent) {
+        // Reinicializar el grafo con aristas y pesos aleatorios
+        try {
+            initializeGraph();
+            drawGraph(); // Redibujar el grafo
         } catch (GraphException | ListException e) {
             e.printStackTrace();
         }
@@ -111,24 +131,14 @@ public class LinkedGraphController {
         });
     }
 
-
-    @FXML
-    public void RandomizeOnAction(ActionEvent actionEvent) {
-        // Reinicializar el grafo con aristas y pesos aleatorios
-        initialize();
-    }
-
     @FXML
     public void DFSOnAction(ActionEvent actionEvent) throws GraphException, ListException, StackException {
-
-            String result = graph.dfs();
-            textArea.setText(result);
-
+        String result = graph.dfs();
+        textArea.setText(result);
     }
 
     @FXML
     public void ContainsVertexOnAction(ActionEvent actionEvent) {
-
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Verificar Vértice");
         dialog.setHeaderText("Ingrese el vértice que desea verificar:");
@@ -140,9 +150,7 @@ public class LinkedGraphController {
             boolean exists;
             try {
                 exists = graph.containsVertex(vertex);
-            } catch (GraphException e) {
-                throw new RuntimeException(e);
-            } catch (ListException e) {
+            } catch (GraphException | ListException e) {
                 throw new RuntimeException(e);
             }
             // Mostrar un mensaje dependiendo del resultado
@@ -156,7 +164,6 @@ public class LinkedGraphController {
             }
             alert.showAndWait();
         });
-
     }
 
     @FXML
@@ -166,11 +173,10 @@ public class LinkedGraphController {
 
     @FXML
     public void BFSOnAction(ActionEvent actionEvent) throws GraphException, QueueException, ListException {
-
-            String result = graph.bfs();
-            textArea.setText(result);
-
+        String result = graph.bfs();
+        textArea.setText(result);
     }
+
     private void drawGraph() {
         paneGrafo.getChildren().clear();
         vertexMap.clear();
@@ -229,12 +235,9 @@ public class LinkedGraphController {
         alert.setHeaderText(null);
         alert.setContentText(message);
 
-
         DialogPane dialogPane = alert.getDialogPane();
-
         dialogPane.setPrefWidth(600);
         dialogPane.setPrefHeight(500);
         alert.showAndWait();
-
     }
 }
