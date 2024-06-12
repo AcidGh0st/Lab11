@@ -274,4 +274,8 @@ public class SinglyLinkedListGraph implements Graph {
         return (Vertex) vertexList.getNode(index).data;
     }
 
+    public Object[][] getSinglyLinkedList() {
+        //Tengo que arreglar esto
+        return getSinglyLinkedList();
+    }
 }
