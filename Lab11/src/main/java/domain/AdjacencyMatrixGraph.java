@@ -345,4 +345,10 @@ public class AdjacencyMatrixGraph implements Graph {
         }
         return result;
     }
+    public Vertex getVertex(int index) throws ListException {
+        if (index < 0 || index >= counter) {
+            throw new ListException("Index out of bounds");
+        }
+        return (Vertex) vertexList[index].data;
+    }
 }

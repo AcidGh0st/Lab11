@@ -357,4 +357,7 @@ public class DirectedSinglyLinkedListGraph implements Graph {
         return result;
     }
 
+    public Vertex getVertex(int index) throws ListException {
+        return (Vertex) vertexList.getNode(index).data;
+    }
 }

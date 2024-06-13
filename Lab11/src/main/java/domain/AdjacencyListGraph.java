@@ -315,11 +315,6 @@ public class AdjacencyListGraph implements Graph {
         vertex.setData(value);
     }
 
-
-
-
-
-
     @Override
     public String toString() {
         String result = "Adjacency List Graph Content";
@@ -332,4 +327,12 @@ public class AdjacencyListGraph implements Graph {
         }
         return result;
     }
+    @Override
+    public Vertex getVertex(int index) throws ListException {
+        if (index < 0 || index >= counter) {
+            throw new ListException("Index out of bounds");
+        }
+        return vertexList[index];
+    }
+
 }

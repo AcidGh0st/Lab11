@@ -368,7 +368,7 @@ public class SinglyLinkedListGraph implements Graph {
     }
     public Vertex getVertex(int index) throws ListException {
         if (index < 1 || index > vertexList.size()) {
-            throw new ListException("Vertex index out of bounds: " + index);
+            throw new ListException("Index out of bounds");
         }
         return (Vertex) vertexList.getNode(index).data;
     }

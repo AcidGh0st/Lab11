@@ -46,4 +46,6 @@ public interface Graph {
 
     // Obtiene los vecinos (vértices adyacentes) de un vértice dado
     public List<Pair<Integer, Integer>> getNeighbors(int vertex) throws GraphException, ListException;
+
+    public Vertex getVertex(int index)throws GraphException, ListException;
 }
