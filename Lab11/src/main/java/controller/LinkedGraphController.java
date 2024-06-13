@@ -239,5 +239,5 @@ public class LinkedGraphController {
         dialogPane.setPrefWidth(600);
         dialogPane.setPrefHeight(500);
         alert.showAndWait();
-    }
+}
 }

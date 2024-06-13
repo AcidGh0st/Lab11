@@ -80,14 +80,13 @@ public class SinglyLinkedListGraph implements Graph {
 
     @Override
     public void addVertex(Object element) throws GraphException, ListException {
-        if (vertexList.size() < 11) {
-            if (!containsVertex(element)) { // Verifica si el vértice ya existe
-                vertexList.add(new Vertex(element));
-            }
+        if (!containsVertex(element)) { // Verifica si el vértice ya existe
+            vertexList.add(new Vertex(element));
         } else {
-            throw new GraphException("Cannot add more than 10 vertices.");
+            throw new GraphException("Vertex already exists in the graph.");
         }
     }
+
 
     @Override
     public void addEdge(Object a, Object b) throws GraphException, ListException {

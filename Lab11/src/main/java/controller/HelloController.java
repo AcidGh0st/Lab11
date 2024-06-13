@@ -49,8 +49,7 @@ public class HelloController {
     }
 
     @FXML
-    void linkedGraphOnAction(ActionEvent event) {
-        loadPage("Linked_Graph.fxml");
+    void linkedGraphOnAction(ActionEvent event) {loadPage("Linked_Graph.fxml");
     }
 
     @FXML
