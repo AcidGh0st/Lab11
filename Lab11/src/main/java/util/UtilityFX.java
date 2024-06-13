@@ -34,7 +34,7 @@ public class UtilityFX {
         return myalert;
     }
 
-    public static TextInputDialog dialog(String title, String headerText){
+    public static TextInputDialog dialog(String title, String headerText, String s){
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle(title);
         dialog.setHeaderText(headerText);

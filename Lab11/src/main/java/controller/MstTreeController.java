@@ -60,27 +60,27 @@ public class MstTreeController {
     }
 
     private void fillGraph(Graph graph) {
-        try {
-            Set<Integer> vertices = new HashSet<>();
-            while (vertices.size() < 10) {
-                vertices.add(util.Utility.getRandom(100, 0));
-            }
-
-            for (Integer vertex : vertices) {
-                graph.addVertex(new Vertex(vertex));
-            }
-
-            for (Integer sourceVertex : vertices) {
-                for (Integer targetVertex : vertices) {
-                    if (!sourceVertex.equals(targetVertex)) {
-                        int randomWeight = util.Utility.getRandom(801, 200);
-                        graph.addEdgeWeight(sourceVertex, targetVertex, randomWeight);
-                    }
-                }
-            }
-        } catch (GraphException | ListException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Set<Integer> vertices = new HashSet<>();
+//            while (vertices.size() < 10) {
+//                vertices.add(util.Utility.getRandom(100, 0));
+//            }
+//
+//            for (Integer vertex : vertices) {
+//                graph.addVertex(new Vertex(vertex));
+//            }
+//
+//            for (Integer sourceVertex : vertices) {
+//                for (Integer targetVertex : vertices) {
+//                    if (!sourceVertex.equals(targetVertex)) {
+//                        int randomWeight = util.Utility.getRandom(801, 200);
+//                        graph.addEdgeWeight(sourceVertex, targetVertex, randomWeight);
+//                    }
+//                }
+//            }
+//        } catch (GraphException | ListException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @javafx.fxml.FXML

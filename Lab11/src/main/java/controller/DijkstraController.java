@@ -113,7 +113,7 @@ public class DijkstraController {
     @FXML
     public void adjListOnAction() {
         try {
-            graph = new AdjacencyListGraph(100); // Inicializar grafo con capacidad para 100 vértices
+            graph = new AdjacencyListGraph(15); // Inicializar grafo con capacidad para 100 vértices
             UtilityFX.alert("List of Adjacency", "Adjacency List graph initialized!").show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +123,7 @@ public class DijkstraController {
 
     @FXML
     public void adjMatrixOnAction() {
-        graph = new AdjacencyMatrixGraph(100); // Inicializar grafo con capacidad para 100 vértices
+        graph = new AdjacencyMatrixGraph(15); // Inicializar grafo con capacidad para 100 vértices
         UtilityFX.alert("Adjacency Matrix", "Adjacency Matrix graph initialized!").show();
     }
 

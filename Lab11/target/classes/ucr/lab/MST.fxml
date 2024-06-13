@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="bp" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MstTreeController">
+   <center>
+      <AnchorPane prefHeight="584.0" prefWidth="668.0">
+         <children>
+            <Pane prefHeight="57.0" prefWidth="668.0" style="-fx-background-color: F4DEFF;">
+               <children>
+                  <Label alignment="CENTER" layoutX="-1.0" layoutY="-7.0" prefHeight="62.0" prefWidth="669.0" style="-fx-background-color: #950857;" text="MinimumSpanning Tree  (Kruskal / Prim)" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Bold" size="28.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane layoutY="56.0" prefHeight="141.0" prefWidth="668.0">
+               <children>
+                  <RadioButton fx:id="radioButtonAdjMatrix" layoutX="33.0" layoutY="46.0" mnemonicParsing="false" onAction="#adjMatrixOnAction" selected="true" text="Adjacency Matrix">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="radioButtonAdjList" layoutX="34.0" layoutY="71.0" mnemonicParsing="false" onAction="#adjListOnAction" text="Adjacency List">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="radioButtonSlList" layoutX="34.0" layoutY="96.0" mnemonicParsing="false" onAction="#LinkedListOnAction" text="LinkedList">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </RadioButton>
+                  <Label layoutX="46.0" layoutY="14.0" text="Graph Type">
+                     <font>
+                        <Font name="Arial Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="265.0" layoutY="81.0" mnemonicParsing="false" onAction="#randomizeOnAction" prefHeight="30.0" prefWidth="117.0" text="Randomize">
+                     <font>
+                        <Font name="Arial" size="15.0" />
+                     </font>
+                  </Button>
+                  <RadioButton fx:id="radioButtonKruskal" layoutX="513.0" layoutY="48.0" mnemonicParsing="false" onAction="#kruskalOnAction" selected="true" text="Kruskal">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="radioButtoPrim" layoutX="514.0" layoutY="73.0" mnemonicParsing="false" onAction="#primOnAction" text="Prim">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </RadioButton>
+                  <Label layoutX="498.0" layoutY="14.0" text="MST Algorithm">
+                     <font>
+                        <Font name="Arial Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane fx:id="paneMST" layoutX="316.0" layoutY="198.0" prefHeight="386.0" prefWidth="352.0" />
+            <Pane fx:id="paneGraphType" layoutY="199.0" prefHeight="385.0" prefWidth="317.0" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

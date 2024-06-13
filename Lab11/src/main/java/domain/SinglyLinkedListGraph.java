@@ -277,21 +277,46 @@ public class SinglyLinkedListGraph implements Graph {
 
 
     @Override
-    public List<Pair<Integer, Integer>> getNeighbors(int vertex) throws GraphException, ListException {
+    public List<Pair<Integer, Integer>> getNeighbors(int vertexIndex) throws GraphException, ListException {
         List<Pair<Integer, Integer>> neighbors = new ArrayList<>();
-        if (vertex < 1 || vertex > vertexList.size()) {
-            throw new GraphException("Vertex index out of bounds: " + vertex);
+        if (vertexIndex < 1 || vertexIndex > vertexList.size()) {
+            throw new GraphException("Vertex index out of bounds: " + vertexIndex);
         }
-        Vertex sourceVertex = getVertex(vertex);
+        Vertex sourceVertex = (Vertex) vertexList.getNode(vertexIndex).data;
         if (sourceVertex != null) {
             for (int i = 1; i <= vertexList.size(); i++) {
                 Vertex targetVertex = (Vertex) vertexList.getNode(i).data;
-                if (sourceVertex.edgesList.contains(new EdgeWeight(targetVertex.data, null))) {
-                    neighbors.add(new Pair<>(i, (int) sourceVertex.edgesList.getNode(new EdgeWeight(targetVertex.data, null)).data));
+                EdgeWeight edgeWeight = getEdgeWeight(sourceVertex.data, targetVertex.data);
+                if (edgeWeight != null) {
+                    neighbors.add(new Pair<>(i, (int) edgeWeight.getWeight()));
                 }
             }
         }
         return neighbors;
+    }
+
+    private EdgeWeight getEdgeWeight(Object a, Object b) throws ListException {
+        Vertex vertexA = findVertex(a);
+        if (vertexA == null || vertexA.edgesList.isEmpty()) {
+            return null;
+        }
+        for (int i = 1; i <= vertexA.edgesList.size(); i++) {
+            EdgeWeight edgeWeight = (EdgeWeight) vertexA.edgesList.getNode(i).data;
+            if (util.Utility.compare(edgeWeight.getEdge(), b) == 0) {
+                return edgeWeight;
+            }
+        }
+        return null;
+    }
+
+    private Vertex findVertex(Object data) throws ListException {
+        for (int i = 1; i <= vertexList.size(); i++) {
+            Vertex vertex = (Vertex) vertexList.getNode(i).data;
+            if (util.Utility.compare(vertex.data, data) == 0) {
+                return vertex;
+            }
+        }
+        return null;
     }
 
 
