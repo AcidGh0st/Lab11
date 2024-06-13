@@ -187,7 +187,7 @@ public class DirectedSinglyLinkedListGraph implements Graph {
             else{
                 vertex = (Vertex)vertexList.getNode(index).data;
                 vertex.setVisited(true); // lo marca
-                info+=vertex+", ";
+                info+=vertex+", \n";
                 stack.push(index); //inserta la posicion
             }
         }
@@ -211,7 +211,7 @@ public class DirectedSinglyLinkedListGraph implements Graph {
                 // obtiene uno
                 vertex = (Vertex)vertexList.getNode(index2).data;
                 vertex.setVisited(true); //lo marco
-                info+=vertex+", ";
+                info+=vertex+", \n";
                 queue.enQueue(index2); // lo encola
             }
         }

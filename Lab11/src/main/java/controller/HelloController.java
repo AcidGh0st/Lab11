@@ -59,7 +59,7 @@ public class HelloController {
 
     @FXML
     void mstOnAction(ActionEvent event) {
-        loadPage("mstKruskalAndPrim.fxml");
+        loadPage("MST.fxml");
     }
 
     @FXML

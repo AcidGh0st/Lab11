@@ -124,7 +124,8 @@ public class DirectSLLGraphController
     public void DFSOnAction(ActionEvent actionEvent) {
         try {
             textArea.clear();
-            textArea.setText(graph.dfs());
+            String result = graph.dfs();
+            textArea.setText(result);
         } catch (GraphException | StackException | ListException e) {
             throw new RuntimeException(e);
         }
@@ -132,65 +133,66 @@ public class DirectSLLGraphController
 
     @javafx.fxml.FXML
     public void randomizeOnAction(ActionEvent actionEvent) {
-//        try {
-//            graph = new DirectedSinglyLinkedListGraph();
-//            vertexMap = new HashMap<>();
-//            Set<Integer> weight = new HashSet<>();
-//            String[] vertexes = {
-//                    "Muralla China", "Torre Eiffel", "Taj Mahal", "Coliseo Romano", "Estatua de la Libertad",
-//                    "Cristo Redentor", "Pirámides de Giza", "Machu Picchu", "Acrópolis de Atenas", "Ciudad Prohibida",
-//                    "Gran Muralla de China", "Mausoleo de Halicarnaso", "Petra", "Torre de Londres", "Angkor Wat",
-//                    "Partenón", "Stonehenge", "Esfinge de Guiza", "Monte Rushmore", "Muro de Berlín",
-//                    "Castillo de Neuschwanstein", "Templo de Karnak", "Alhambra", "Sagrada Familia", "Templo de Borobudur",
-//                    "Torre Inclinada de Pisa", "Moais de la Isla de Pascua", "Catedral de Notre Dame", "Templo de Luxor",
-//                    "Acueducto de Segovia"
-//            };
-//
-//            // Selecciona aleatoriamente 10 nombres sin repetir
-//            List<String> selectedVertexes = new ArrayList<>();
-//            Random random = new Random();
-//            while (selectedVertexes.size() < 10) {
-//                String randomVertex = vertexes[random.nextInt(vertexes.length)];
-//                if (!selectedVertexes.contains(randomVertex)) {
-//                    selectedVertexes.add(randomVertex);
-//                }
-//            }
-//
-//            //Añadir vertices al grafo
-//            for (String vertex : selectedVertexes) {
-//                graph.addVertex(vertex);
-//            }
-//
-//            // Shuffle the list of vertices
-//            Collections.shuffle(selectedVertexes);
-//
-//            for (int i = 0; i < selectedVertexes.size() - 1; i++) {
-//                String sourceVertex = selectedVertexes.get(i);
-//                String targetVertex = selectedVertexes.get(i + 1);
-//
-//                int edgeWeight = util.Utility.getRandom(201, 2001);
-//                graph.addEdgeWeight(sourceVertex, targetVertex, edgeWeight);
-//            }
-//
-//            // Add an edge between the last and first vertices to complete the cycle
-//            String lastVertex = selectedVertexes.get(selectedVertexes.size() - 1);
-//            String firstVertex = selectedVertexes.get(0);
-//            int edgeWeight = util.Utility.getRandom(201, 2001);
-//            graph.addEdgeWeight(lastVertex, firstVertex, edgeWeight);
-//
-//            // Draw the graph
-//            drawGraph();
-//
-//        } catch (GraphException | ListException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            graph = new DirectedSinglyLinkedListGraph();
+            vertexMap = new HashMap<>();
+            Set<Integer> weight = new HashSet<>();
+            String[] vertexes = {
+                    "Muralla China", "Torre Eiffel", "Taj Mahal", "Coliseo Romano", "Estatua de la Libertad",
+                    "Cristo Redentor", "Pirámides de Giza", "Machu Picchu", "Acrópolis de Atenas", "Ciudad Prohibida",
+                    "Gran Muralla de China", "Mausoleo de Halicarnaso", "Petra", "Torre de Londres", "Angkor Wat",
+                    "Partenón", "Stonehenge", "Esfinge de Guiza", "Monte Rushmore", "Muro de Berlín",
+                    "Castillo de Neuschwanstein", "Templo de Karnak", "Alhambra", "Sagrada Familia", "Templo de Borobudur",
+                    "Torre Inclinada de Pisa", "Moais de la Isla de Pascua", "Catedral de Notre Dame", "Templo de Luxor",
+                    "Acueducto de Segovia"
+            };
+
+            // Selecciona aleatoriamente 10 nombres sin repetir
+            List<String> selectedVertexes = new ArrayList<>();
+            Random random = new Random();
+            while (selectedVertexes.size() < 10) {
+                String randomVertex = vertexes[random.nextInt(vertexes.length)];
+                if (!selectedVertexes.contains(randomVertex)) {
+                    selectedVertexes.add(randomVertex);
+                }
+            }
+
+            //Añadir vertices al grafo
+            for (String vertex : selectedVertexes) {
+                graph.addVertex(vertex);
+            }
+
+            // Shuffle the list of vertices
+            Collections.shuffle(selectedVertexes);
+
+            for (int i = 0; i < selectedVertexes.size() - 1; i++) {
+                String sourceVertex = selectedVertexes.get(i);
+                String targetVertex = selectedVertexes.get(i + 1);
+
+                int edgeWeight = util.Utility.getRandom(201, 2001);
+                graph.addEdgeWeight(sourceVertex, targetVertex, edgeWeight);
+            }
+
+            // Add an edge between the last and first vertices to complete the cycle
+            String lastVertex = selectedVertexes.get(selectedVertexes.size() - 1);
+            String firstVertex = selectedVertexes.get(0);
+            int edgeWeight = util.Utility.getRandom(201, 2001);
+            graph.addEdgeWeight(lastVertex, firstVertex, edgeWeight);
+
+            // Draw the graph
+            drawGraph();
+
+        } catch (GraphException | ListException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @javafx.fxml.FXML
     public void BFSOnAction(ActionEvent actionEvent) {
         try {
             textArea.clear();
-            textArea.setText(graph.bfs());
+            String result = graph.bfs();
+            textArea.setText(result);
         } catch (GraphException | ListException | QueueException e) {
             throw new RuntimeException(e);
         }
@@ -205,10 +207,10 @@ public class DirectSLLGraphController
             } catch (GraphException | ListException e) {
                 throw new RuntimeException(e);
             }
-                // Mostrar un mensaje dependiendo del resultado
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Resultado de la búsqueda");
-                alert.setHeaderText(null);
+            // Mostrar un mensaje dependiendo del resultado
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Resultado de la búsqueda");
+            alert.setHeaderText(null);
             if (exists) {
                 alert.setContentText("El vértice " + vertex + " está en el grafo.");
             } else {
@@ -220,37 +222,37 @@ public class DirectSLLGraphController
 
     @javafx.fxml.FXML
     public void containsEdgeOnAction(ActionEvent actionEvent) {
-//        TextInputDialog dialog = new TextInputDialog();
-//        dialog.setTitle("Verificar Arista");
-//        dialog.setHeaderText("Ingrese los vértices para verificar la arista:");
-//        dialog.setContentText("Vértice A:");
-//
-//
-//        dialog.showAndWait().ifPresent(vertexA -> {
-//
-//            dialog.setHeaderText("Ingrese el segundo vértice:");
-//            dialog.setContentText("Vértice B:");
-//
-//            dialog.showAndWait().ifPresent(vertexB -> {
-//                try {
-//                    boolean containsEdge = graph.containsEdge(vertexA, vertexB);
-//
-//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                    alert.setTitle("Resultado");
-//                    alert.setHeaderText(null);
-//
-//                    if (containsEdge) {
-//                        alert.setContentText("Existe una arista entre los vértices " + vertexA + " y " + vertexB);
-//                    } else {
-//                        alert.setContentText("No existe una arista entre los vértices " + vertexA + " y " + vertexB);
-//                    }
-//                    alert.showAndWait();
-//                } catch (GraphException | ListException e) {
-//                    e.printStackTrace();
-//                    util.UtilityFX.alert("Error",
-//                            "Ocurrió un error al verificar la arista: ", Alert.AlertType.ERROR);
-//                }
-//            });
-//        });
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Verificar Arista");
+        dialog.setHeaderText("Ingrese los vértices para verificar la arista:");
+        dialog.setContentText("Vértice A:");
+
+
+        dialog.showAndWait().ifPresent(vertexA -> {
+
+            dialog.setHeaderText("Ingrese el segundo vértice:");
+            dialog.setContentText("Vértice B:");
+
+            dialog.showAndWait().ifPresent(vertexB -> {
+                try {
+                    boolean containsEdge = graph.containsEdge(vertexA, vertexB);
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Resultado");
+                    alert.setHeaderText(null);
+
+                    if (containsEdge) {
+                        alert.setContentText("Existe una arista entre los vértices " + vertexA + " y " + vertexB);
+                    } else {
+                        alert.setContentText("No existe una arista entre los vértices " + vertexA + " y " + vertexB);
+                    }
+                    alert.showAndWait();
+                } catch (GraphException | ListException e) {
+                    e.printStackTrace();
+                    util.UtilityFX.alert("Error",
+                            "Ocurrió un error al verificar la arista: ", Alert.AlertType.ERROR);
+                }
+            });
+        });
     }
 }

@@ -36,6 +36,10 @@ public class Utility {
         return new Random().nextInt(bound)+1;
     }
 
+    public static int getRandom(int bound, int n) {
+        return new Random().nextInt(bound)+n;
+    }
+
     public static int compare(Object a, Object b) {
         switch (instanceOf(a, b)){
             case "Integer":

@@ -3,6 +3,7 @@ package controller;
 import domain.*;
 import domain.list.ListException;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -16,96 +17,96 @@ import java.util.Map;
 import java.util.Set;
 
 public class MstTreeController {
-    @javafx.fxml.FXML
+
+    @FXML
     private BorderPane bp;
-    @javafx.fxml.FXML
+    @FXML
     private Pane paneMST;
-    @javafx.fxml.FXML
+    @FXML
     private Pane paneGraphType;
-    private AdjacencyListGraph adjListGraph;
-    private AdjacencyMatrixGraph adjMatrixGraph;
-    private SinglyLinkedListGraph slListGraph;
-    @javafx.fxml.FXML
+    private SinglyLinkedListGraph slListGraph; // Cambiado a SinglyLinkedListGraph
+    @FXML
     private RadioButton radioButtonAdjList;
-    @javafx.fxml.FXML
+    @FXML
     private RadioButton radioButtonAdjMatrix;
-    @javafx.fxml.FXML
+    @FXML
     private RadioButton radioButtonKruskal;
-    @javafx.fxml.FXML
+    @FXML
     private RadioButton radioButtonSlList;
-    @javafx.fxml.FXML
+    @FXML
     private RadioButton radioButtonPrim;
     private Map<Vertex, Circle> vertexMap = new HashMap<>();
 
-    @javafx.fxml.FXML
+    @FXML
     public void initialize() {
         // Inicialización adicional si es necesario
     }
 
-    @javafx.fxml.FXML
+    @FXML
     public void randomizeOnAction(ActionEvent actionEvent) {
-        if (radioButtonAdjList.isSelected()) {
-            adjListGraph = new AdjacencyListGraph(10);
-            fillGraph(adjListGraph);
-            drawGraph(adjListGraph);
-        } else if (radioButtonAdjMatrix.isSelected()) {
-            adjMatrixGraph = new AdjacencyMatrixGraph(10);
-            fillGraph(adjMatrixGraph);
-            drawGraph(adjMatrixGraph);
-        } else if (radioButtonSlList.isSelected()) {
-            slListGraph = new SinglyLinkedListGraph();
-            fillGraph(slListGraph);
-            drawGraph(slListGraph);
+        slListGraph = new SinglyLinkedListGraph(); // Instancia de SinglyLinkedListGraph
+        fillGraph();
+        drawGraph(slListGraph);
+    }
+
+    private void fillGraph() {
+        try {
+            Set<Integer> vertices = new HashSet<>();
+            while (vertices.size() < 10) {
+                vertices.add(util.Utility.getRandom(100, 0));
+            }
+
+            System.out.println("Vertices to be added: " + vertices);
+
+            for (Integer vertex : vertices) {
+                slListGraph.addVertex(new Vertex(vertex));
+            }
+
+            System.out.println("Vertices added to the graph.");
+
+            for (Integer sourceVertex : vertices) {
+                for (Integer targetVertex : vertices) {
+                    if (!sourceVertex.equals(targetVertex)) {
+                        int randomWeight = util.Utility.getRandom(801, 200);
+                        try {
+                            slListGraph.addEdgeWeight(sourceVertex, targetVertex, randomWeight); // Requiere implementación
+                            System.out.println("Edge added between " + sourceVertex + " and " + targetVertex + " with weight " + randomWeight);
+                        } catch (GraphException e) {
+                            System.out.println("Error adding edge between " + sourceVertex + " and " + targetVertex + ": " + e.getMessage());
+                        }
+                    }
+                }
+            }
+        } catch (ListException e) {
+            e.printStackTrace();
+        } catch (GraphException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void fillGraph(Graph graph) {
-//        try {
-//            Set<Integer> vertices = new HashSet<>();
-//            while (vertices.size() < 10) {
-//                vertices.add(util.Utility.getRandom(100, 0));
-//            }
-//
-//            for (Integer vertex : vertices) {
-//                graph.addVertex(new Vertex(vertex));
-//            }
-//
-//            for (Integer sourceVertex : vertices) {
-//                for (Integer targetVertex : vertices) {
-//                    if (!sourceVertex.equals(targetVertex)) {
-//                        int randomWeight = util.Utility.getRandom(801, 200);
-//                        graph.addEdgeWeight(sourceVertex, targetVertex, randomWeight);
-//                    }
-//                }
-//            }
-//        } catch (GraphException | ListException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    @javafx.fxml.FXML
+    @FXML
     public void adjListOnAction(ActionEvent actionEvent) {
         radioButtonAdjMatrix.setSelected(false);
         radioButtonSlList.setSelected(false);
     }
 
-    @javafx.fxml.FXML
+    @FXML
     public void kruskalOnAction(ActionEvent actionEvent) {
         radioButtonPrim.setSelected(false);
     }
 
-    @javafx.fxml.FXML
+    @FXML
     public void adjMatrixOnAction(ActionEvent actionEvent) {
         radioButtonAdjList.setSelected(false);
         radioButtonSlList.setSelected(false);
     }
 
-    @javafx.fxml.FXML
+    @FXML
     public void primOnAction(ActionEvent actionEvent) {
         radioButtonKruskal.setSelected(false);
     }
 
-    @javafx.fxml.FXML
+    @FXML
     public void LinkedListOnAction(ActionEvent actionEvent) {
         radioButtonAdjList.setSelected(false);
         radioButtonAdjMatrix.setSelected(false);
@@ -125,6 +126,7 @@ public class MstTreeController {
             int n = graph.size();
             double angleStep = 2 * Math.PI / n;
 
+            // Dibujar los vértices
             for (int i = 0; i < n; i++) {
                 Vertex vertex = graph.getVertex(i + 1);
                 String vertexName = vertex.getData().toString();
@@ -140,18 +142,22 @@ public class MstTreeController {
                 paneGraphType.getChildren().addAll(circle, text);
             }
 
+            // Dibujar las aristas
             for (int i = 0; i < n; i++) {
                 Vertex vertex = graph.getVertex(i + 1);
                 for (int j = 0; j < vertex.edgesList.size(); j++) {
                     EdgeWeight edge = (EdgeWeight) vertex.edgesList.getNode(j + 1).data;
-                    String targetVertex = edge.getEdge().toString();
+                    Vertex targetVertex = graph.getVertex((Integer) edge.getEdge());
+
                     Circle sourceCircle = vertexMap.get(vertex);
                     Circle targetCircle = vertexMap.get(targetVertex);
 
-                    Line line = new Line(sourceCircle.getCenterX(), sourceCircle.getCenterY(),
-                            targetCircle.getCenterX(), targetCircle.getCenterY());
-                    line.setStrokeWidth(2);
-                    paneGraphType.getChildren().add(0, line);
+                    if (sourceCircle != null && targetCircle != null) {
+                        Line line = new Line(sourceCircle.getCenterX(), sourceCircle.getCenterY(),
+                                targetCircle.getCenterX(), targetCircle.getCenterY());
+                        line.setStrokeWidth(2);
+                        paneGraphType.getChildren().add(0, line);
+                    }
                 }
             }
         } catch (ListException | GraphException e) {

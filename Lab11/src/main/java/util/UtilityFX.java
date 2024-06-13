@@ -33,6 +33,17 @@ public class UtilityFX {
         dialogPane.getStyleClass().add("myDialog");
         return myalert;
     }
+    public static Alert alert(String content, String headerText, Alert.AlertType alertType){
+        Alert myalert = new Alert(alertType);
+        myalert.setTitle(null);
+        myalert.setHeaderText(headerText);
+        myalert.setContentText(content);
+        DialogPane dialogPane = myalert.getDialogPane();
+        String css = HelloApplication.class.getResource("dialog.css").toExternalForm();
+        dialogPane.getStylesheets().add(css);
+        dialogPane.getStyleClass().add("myDialog");
+        return myalert;
+    }
 
     public static TextInputDialog dialog(String title, String headerText, String s){
         TextInputDialog dialog = new TextInputDialog();
