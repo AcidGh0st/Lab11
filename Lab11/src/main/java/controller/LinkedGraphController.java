@@ -46,27 +46,27 @@ public class LinkedGraphController {
 
         try {
             initializeGraph();
-            drawGraph(); // Dibujar el grafo
+            drawGraph();
         } catch (GraphException | ListException e) {
             e.printStackTrace();
         }
     }
 
     private void initializeGraph() throws GraphException, ListException {
-        // Limpiar el grafo existente
+
         graph.clear();
 
-        // Mezclar los nombres y seleccionar los primeros 10
+
         List<String> namesList = Arrays.asList(vertexNames);
         Collections.shuffle(namesList);
         List<String> selectedNames = namesList.subList(0, 10);
 
-        // Inicializar el grafo con los vértices seleccionados
+
         for (String vertex : selectedNames) {
             graph.addVertex(vertex);
         }
 
-        // Agregar aristas con conexiones aleatorias
+
         Random random = new Random();
         for (String vertex1 : selectedNames) {
             for (String vertex2 : selectedNames) {
@@ -80,10 +80,10 @@ public class LinkedGraphController {
 
     @FXML
     public void RandomizeOnAction(ActionEvent actionEvent) {
-        // Reinicializar el grafo con aristas y pesos aleatorios
+
         try {
             initializeGraph();
-            drawGraph(); // Redibujar el grafo
+            drawGraph();
         } catch (GraphException | ListException e) {
             e.printStackTrace();
         }
@@ -108,7 +108,7 @@ public class LinkedGraphController {
                 try {
                     boolean containsEdge = graph.containsEdge(vertexA, vertexB);
 
-                    // Mostrar el resultado al usuario
+
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Resultado");
                     alert.setHeaderText(null);
@@ -120,7 +120,7 @@ public class LinkedGraphController {
                     alert.showAndWait();
                 } catch (GraphException | ListException e) {
                     e.printStackTrace();
-                    // Mostrar un mensaje de error si ocurre alguna excepción
+
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
@@ -144,16 +144,16 @@ public class LinkedGraphController {
         dialog.setHeaderText("Ingrese el vértice que desea verificar:");
         dialog.setContentText("Vértice:");
 
-        // Mostrar el cuadro de diálogo y esperar a que el usuario ingrese un vértice
+
         dialog.showAndWait().ifPresent(vertex -> {
-            // Verificar si el vértice está en el grafo
+
             boolean exists;
             try {
                 exists = graph.containsVertex(vertex);
             } catch (GraphException | ListException e) {
                 throw new RuntimeException(e);
             }
-            // Mostrar un mensaje dependiendo del resultado
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Resultado de la búsqueda");
             alert.setHeaderText(null);
@@ -192,7 +192,6 @@ public class LinkedGraphController {
             int n = graph.size();
             double angleStep = 2 * Math.PI / n;
 
-            // Posicionar vértices en un círculo
             for (int i = 1; i <= n; i++) {
                 Vertex vertex = graph.getVertex(i);
                 String vertexName = vertex.getData().toString();
@@ -221,6 +220,13 @@ public class LinkedGraphController {
                     Line line = new Line(sourceCircle.getCenterX(), sourceCircle.getCenterY(),
                             targetCircle.getCenterX(), targetCircle.getCenterY());
                     line.setStrokeWidth(2); // Ajustar el ancho de la línea si es necesario
+
+
+                    line.setOnMouseClicked(event -> {
+                        String message = "Edge between vertexes: [" + vertexName + "]......[" + targetVertex + "]. Weight: " + edge.getWeight();
+                        textMessage.setText(message);
+                    });
+
                     paneGrafo.getChildren().add(0, line); // Agregar la línea al principio para que se dibuje debajo de los vértices
                 }
             }
@@ -228,6 +234,7 @@ public class LinkedGraphController {
             e.printStackTrace();
         }
     }
+
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -239,5 +246,5 @@ public class LinkedGraphController {
         dialogPane.setPrefWidth(600);
         dialogPane.setPrefHeight(500);
         alert.showAndWait();
-}
+    }
 }

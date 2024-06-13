@@ -53,11 +53,10 @@ class SinglyLinkedListGraphTest {
     @Test
     void testSingly(){
     try {
-        // a. Cree e instancie un objeto tipo SinglyLinkedListGraph llamado “graph”.
+
         SinglyLinkedListGraph graph = new SinglyLinkedListGraph();
 
-        // b. Para el grafo, agregue vértices, aristas y pesos de acuerdo con el siguiente modelo:
-        // Vertices: A, B, C, D, E, F, G, H, I, J
+
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
@@ -69,7 +68,7 @@ class SinglyLinkedListGraphTest {
         graph.addVertex("I");
         graph.addVertex("J");
 
-        // Edges: (A, B), (A, C), (A, D), (B, F), (C, G), (D, H), (E, F), (F, G), (G, H), (H, I), (G, J)
+
         graph.addEdge("A", "B");
         graph.addEdge("A", "C");
         graph.addEdge("A", "D");
@@ -82,7 +81,7 @@ class SinglyLinkedListGraphTest {
         graph.addEdge("H", "I");
         graph.addEdge("G", "J");
 
-        // c. Agregue como pesos nombres de personas
+
         graph.addWeight("A", "B", "John");
         graph.addWeight("A", "C", "Doe");
         graph.addWeight("A", "D", "Jane");
@@ -95,23 +94,23 @@ class SinglyLinkedListGraphTest {
         graph.addWeight("H", "I", "Grace");
         graph.addWeight("G", "J", "Hank");
 
-        // d. Muestre el contenido del grafo por consola (vértices, aristas, pesos)
+
         System.out.println(graph);
 
-        // e. Pruebe los recorridos dfs(), bfs() y muestre los resultados por consola
+
         System.out.println("DFS: " + graph.dfs());
         System.out.println("BFS: " + graph.bfs());
 
-        // f. Suprima los vértices F, H, J (también deberá suprimir aristas y pesos)
+
         graph.removeVertex("F");
         graph.removeVertex("H");
         graph.removeVertex("J");
 
-        // g. Pruebe nuevamente los recorridos dfs(), bfs() y muestre los resultados por consola
+
         System.out.println("DFS after removals: " + graph.dfs());
         System.out.println("BFS after removals: " + graph.bfs());
 
-        // h. Muestre el contenido del grafo por consola (vértices, aristas, pesos)
+
         System.out.println(graph);
 
     } catch (GraphException | ListException | QueueException | StackException e) {

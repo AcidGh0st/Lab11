@@ -52,13 +52,13 @@ class DirectedSinglyLinkedListGraphTest {
 
 
 @Test
-    void DirectedSinglyLinkedListGraphTest(){
+    void directedSinglyLinkedListGraphTest(){
 
     try {
-        // a. Create and instantiate a DirectedSinglyLinkedListGraph object named “graph”.
+
         DirectedSinglyLinkedListGraph graph = new DirectedSinglyLinkedListGraph();
 
-        // b. Add vertices and edges with random weights between 500 and 1000.
+
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addVertex(3);
@@ -85,19 +85,19 @@ class DirectedSinglyLinkedListGraphTest {
         graph.addEdgeWeight(5, 3, random.nextInt(501) + 500);
         graph.addEdgeWeight(5, 4, random.nextInt(501) + 500);
 
-        // c. Override the toString() method and display the information on the console (vertices, edges, weights).
+
         System.out.println(graph);
 
-        // d. Test DFS and BFS traversals and print the results.
+
         System.out.println("DFS: " + graph.dfs());
         System.out.println("BFS: " + graph.bfs());
 
-        // e. Remove vertices 2, 4, 5 (including their edges and weights).
+
         graph.removeVertex(2);
         graph.removeVertex(4);
         graph.removeVertex(5);
 
-        // f. Print the graph contents after vertex removal.
+
         System.out.println(graph);
 
     } catch (GraphException | ListException | QueueException | StackException e) {
