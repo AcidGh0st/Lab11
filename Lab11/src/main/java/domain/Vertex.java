@@ -3,23 +3,26 @@ package domain;
 import domain.list.SinglyLinkedList;
 
 public class Vertex {
-    public Object data;
-    private boolean visited; //para los recorridos DFS, BFS
-    public SinglyLinkedList edgesList; //lista de aristas
+    public Object data; // El tipo de data puede ser String, Integer, u otro según tu aplicación
+    public boolean visited;
+    public SinglyLinkedList edgesList;
 
-    //Constructor
-    public Vertex(Object data){
+    public Vertex(Object data) {
         this.data = data;
         this.visited = false;
         this.edgesList = new SinglyLinkedList();
     }
 
-    public boolean isVisited() {
-        return visited;
-    }
-
     public Object getData() {
         return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    public boolean isVisited() {
+        return visited;
     }
 
     public void setVisited(boolean visited) {
@@ -28,6 +31,6 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return data+"";
+        return data.toString(); // Asegúrate de convertir data a String de manera segura
     }
 }

@@ -311,6 +311,17 @@ public class AdjacencyMatrixGraph implements Graph {
         return vertices;
     }
 
+    @Override
+    public void updateVertexValue(Object vertexData, Object value) throws GraphException, ListException {
+        int index = indexOf(vertexData);
+        if (index == -1) {
+            throw new GraphException("Vertex not found in the graph.");
+        }
+
+        // Actualizar el valor del vértice
+        vertexList[index].setData(value);
+    }
+
 
 
     @Override

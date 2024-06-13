@@ -322,6 +322,11 @@ public class DirectedSinglyLinkedListGraph implements Graph {
         return List.of();
     }
 
+    @Override
+    public void updateVertexValue(Object vertex, Object value) throws GraphException, ListException {
+
+    }
+
     private int indexOf(Object value) throws ListException {
         for (int i = 1; i <= vertexList.size(); i++) {
             Vertex vertex = (Vertex) vertexList.getNode(i).data;

@@ -275,9 +275,13 @@ public class SinglyLinkedListGraph implements Graph {
         return distances;
     }
 
+
     @Override
     public List<Pair<Integer, Integer>> getNeighbors(int vertex) throws GraphException, ListException {
         List<Pair<Integer, Integer>> neighbors = new ArrayList<>();
+        if (vertex < 1 || vertex > vertexList.size()) {
+            throw new GraphException("Vertex index out of bounds: " + vertex);
+        }
         Vertex sourceVertex = getVertex(vertex);
         if (sourceVertex != null) {
             for (int i = 1; i <= vertexList.size(); i++) {
@@ -289,6 +293,7 @@ public class SinglyLinkedListGraph implements Graph {
         }
         return neighbors;
     }
+
 
     @Override
     public List<Object> getVertices() throws ListException {
@@ -322,6 +327,24 @@ public class SinglyLinkedListGraph implements Graph {
     }
 
     @Override
+    public void updateVertexValue(Object vertexData, Object value) throws GraphException, ListException {
+        int n = vertexList.size();
+        boolean vertexFound = false;
+        for (int i = 1; i <= n; i++) {
+            Vertex vertex = (Vertex) vertexList.getNode(i).data;
+            if (util.Utility.compare(vertex.data, vertexData) == 0) {
+                vertex.setData(value);
+                vertexFound = true;
+                break;
+            }
+        }
+        if (!vertexFound) {
+            throw new GraphException("Vertex not found in the graph.");
+        }
+    }
+
+
+    @Override
     public String toString() {
         String result = "SINGLY LINKED LIST GRAPH CONTENT...\n";
         try {
@@ -345,8 +368,9 @@ public class SinglyLinkedListGraph implements Graph {
     }
     public Vertex getVertex(int index) throws ListException {
         if (index < 1 || index > vertexList.size()) {
-            throw new ListException("Index out of bounds");
+            throw new ListException("Vertex index out of bounds: " + index);
         }
         return (Vertex) vertexList.getNode(index).data;
     }
+
 }

@@ -224,6 +224,7 @@ public class AdjacencyListGraph implements Graph {
         return -1;
     }
 
+
     public String shortestPath(Object start, Object end) throws GraphException, ListException {
         if (!containsVertex(start) || !containsVertex(end)) {
             throw new GraphException("One or both vertices not found.");
@@ -300,6 +301,22 @@ public class AdjacencyListGraph implements Graph {
         }
         return vertices;
     }
+
+
+    @Override
+    public void updateVertexValue(Object vertexData, Object value) throws GraphException, ListException {
+        int index = indexOf(vertexData);
+        if (index == -1) {
+            throw new GraphException("Vertex not found in the graph.");
+        }
+
+        // Obtener el vértice correspondiente y actualizar su valor
+        Vertex vertex = (Vertex) vertexList[index].getData();
+        vertex.setData(value);
+    }
+
+
+
 
 
 

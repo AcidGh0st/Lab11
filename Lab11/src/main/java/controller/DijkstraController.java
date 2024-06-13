@@ -18,6 +18,8 @@ import javafx.util.Pair;
 import util.UtilityFX;
 
 import java.util.*;
+
+
 public class DijkstraController {
     @FXML
     private RadioButton radbLinkedList;
@@ -51,7 +53,7 @@ public class DijkstraController {
         radbAdjMatrix.setToggleGroup(toggleGroup);
         radbAdjList.setToggleGroup(toggleGroup);
 
-        columnPosition.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getKey() + 1));
+        columnPosition.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getKey()));
         columnVertex.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getValue().getKey()));
         columnDistance.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getValue().getValue()));
 
@@ -68,7 +70,7 @@ public class DijkstraController {
             return;
         }
 
-        int numVertices = 10; // Número de vértices
+        int numVertices = 10; // Ajustado para incluir el vértice en la posición 0
         int maxEdges = 20; // Número máximo de aristas
 
         Set<Integer> vertices = new HashSet<>();
@@ -83,7 +85,6 @@ public class DijkstraController {
 
         for (int vertex : vertices) {
             try {
-                System.out.println("Adding vertex: " + vertex); // Depuración
                 graph.addVertex(vertex); // Agrega vértices aleatorios únicos
             } catch (GraphException | ListException e) {
                 e.printStackTrace();
@@ -91,13 +92,13 @@ public class DijkstraController {
         }
 
         for (int i = 0; i < maxEdges; i++) {
-            int src = new ArrayList<>(vertices).get(random.nextInt(numVertices)); // Obtiene un vértice de manera aleatoria
-            int dest = new ArrayList<>(vertices).get(random.nextInt(numVertices)); // Obtiene otro vértice de manera aleatoria
+            List<Integer> vertexList = new ArrayList<>(vertices);
+            int src = vertexList.get(random.nextInt(vertexList.size())); // Obtiene un vértice de manera aleatoria
+            int dest = vertexList.get(random.nextInt(vertexList.size())); // Obtiene otro vértice de manera aleatoria
             int weight = 200 + random.nextInt(801); // Peso aleatorio
 
             try {
                 if (!graph.containsEdge(src, dest)) {
-                    System.out.println("Adding edge: " + src + " -> " + dest + " with weight " + weight); // Depuración
                     graph.addEdgeWeight(src, dest, weight);
                 }
             } catch (GraphException | ListException e) {
@@ -109,32 +110,33 @@ public class DijkstraController {
         drawGraph(); // Dibujar el grafo después de la aleatorización
     }
 
-
-
-
     @FXML
     public void adjListOnAction() {
-        graph = new AdjacencyListGraph(100); // Especificar tamaño
-        UtilityFX.alert("List of Adjacency", "Adjacency List graph initialized!").show();
+        try {
+            graph = new AdjacencyListGraph(100); // Inicializar grafo con capacidad para 100 vértices
+            UtilityFX.alert("List of Adjacency", "Adjacency List graph initialized!").show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            UtilityFX.alert("Error", "Failed to initialize Adjacency List graph: " + e.getMessage()).show();
+        }
     }
 
     @FXML
     public void adjMatrixOnAction() {
-        graph = new AdjacencyMatrixGraph(100); // Especificar tamaño
+        graph = new AdjacencyMatrixGraph(100); // Inicializar grafo con capacidad para 100 vértices
         UtilityFX.alert("Adjacency Matrix", "Adjacency Matrix graph initialized!").show();
     }
 
     @FXML
     public void linkedListOnAction() {
         try {
-            graph = new SinglyLinkedListGraph(); // Tamaño predeterminado
+            graph = new SinglyLinkedListGraph(); // Inicializar grafo con la implementación de lista enlazada
             UtilityFX.alert("Linked List", "Linked List graph initialized!").show();
         } catch (Exception e) {
             e.printStackTrace();
             UtilityFX.alert("Error", "Failed to initialize Linked List graph: " + e.getMessage()).show();
         }
     }
-
 
     private void applyDijkstra() {
         if (graph == null) {
@@ -144,21 +146,19 @@ public class DijkstraController {
 
         data.clear();
         try {
-            int source = 0; // Default starting vertex
+            int source = 0; // Vértice de inicio por defecto
             Map<Integer, Integer> distances = dijkstra(source);
 
             int position = 0;
             for (int i = 0; i < graph.size(); i++) {
                 int vertex = i;
-                int distance = distances.containsKey(i) ? distances.get(i) : 0; // Obtener valor 0 si no hay conexión
-                data.add(new Pair<>(position++, new Pair<>(vertex, distance)));
+                int distance = distances.containsKey(i) ? distances.get(i) : Integer.MAX_VALUE; // Usar MAX_VALUE para mostrar no conectado
+                data.add(new Pair<>(position++, new Pair<>(vertex, distance))); // Ajustar el orden de los valores en el Pair
             }
         } catch (GraphException | ListException e) {
             e.printStackTrace();
         }
     }
-
-
 
     private Map<Integer, Integer> dijkstra(int start) throws GraphException, ListException {
         int n = graph.size();
@@ -197,8 +197,6 @@ public class DijkstraController {
         return distances;
     }
 
-
-
     private void drawGraph() {
         midPane.getChildren().clear();
         vertexMap.clear();
@@ -213,32 +211,42 @@ public class DijkstraController {
             int n = graph.size();
             double angleStep = 2 * Math.PI / n;
 
+            // Dibujar vértices en un círculo
             for (int i = 0; i < n; i++) {
                 double angle = i * angleStep;
                 double x = centerX + radius * Math.cos(angle);
                 double y = centerY + radius * Math.sin(angle);
 
-                Circle circle = new Circle(x, y, 20); // Aumentar el tamaño del círculo
+                Circle circle = new Circle(x, y, 20); // Tamaño del círculo
                 circle.setStyle("-fx-fill: lightblue; -fx-stroke: black;");
-                Text text = new Text(String.valueOf(i)); // Agregar el valor del vértice
+
+                Text text = new Text(String.valueOf(i)); // Valor del vértice
                 text.setX(x - 5); // Ajustar posición del texto
                 text.setY(y + 5); // Ajustar posición del texto
 
                 vertexMap.put(i, circle);
-                midPane.getChildren().add(circle);
-                midPane.getChildren().add(text);
+                midPane.getChildren().addAll(circle, text);
             }
 
+            // Dibujar aristas
             for (int i = 0; i < n; i++) {
                 List<Pair<Integer, Integer>> neighbors = graph.getNeighbors(i);
                 Circle sourceCircle = vertexMap.get(i);
                 for (Pair<Integer, Integer> neighbor : neighbors) {
                     int targetVertex = neighbor.getKey();
                     Circle targetCircle = vertexMap.get(targetVertex);
+
                     Line line = new Line(sourceCircle.getCenterX(), sourceCircle.getCenterY(),
                             targetCircle.getCenterX(), targetCircle.getCenterY());
                     line.setStrokeWidth(2); // Ajustar el ancho de la línea si es necesario
-                    midPane.getChildren().add(0, line); // Agregar la línea al principio para que se dibuje debajo de los vértices
+                    midPane.getChildren().add(0, line); // Dibujar debajo de los vértices
+
+                    // Agregar etiquetas de peso de arista
+                    Text weightText = new Text(String.valueOf(neighbor.getValue()));
+                    weightText.setX((sourceCircle.getCenterX() + targetCircle.getCenterX()) / 2);
+                    weightText.setY((sourceCircle.getCenterY() + targetCircle.getCenterY()) / 2);
+                    weightText.setFill(Color.RED); // Cambiar color del peso a rojo
+                    midPane.getChildren().add(weightText);
                 }
             }
         } catch (ListException | GraphException e) {
@@ -246,3 +254,5 @@ public class DijkstraController {
         }
     }
 }
+
+
