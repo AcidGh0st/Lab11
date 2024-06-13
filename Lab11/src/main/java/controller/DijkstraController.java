@@ -5,7 +5,6 @@ import domain.list.ListException;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +17,6 @@ import javafx.util.Pair;
 import util.UtilityFX;
 
 import java.util.*;
-
 
 public class DijkstraController {
     @FXML
@@ -70,8 +68,8 @@ public class DijkstraController {
             return;
         }
 
-        int numVertices = 10; // Ajustado para incluir el vértice en la posición 0
-        int maxEdges = 20; // Número máximo de aristas
+        int numVertices = 10;
+        int maxEdges = 20;
 
         Set<Integer> vertices = new HashSet<>();
         Random random = new Random();
@@ -79,13 +77,13 @@ public class DijkstraController {
         graph.clear();
 
         while (vertices.size() < numVertices) {
-            int vertexValue = random.nextInt(99) + 1; // Genera valores aleatorios entre 1 y 99
+            int vertexValue = random.nextInt(99) + 1;
             vertices.add(vertexValue);
         }
 
         for (int vertex : vertices) {
             try {
-                graph.addVertex(vertex); // Agrega vértices aleatorios únicos
+                graph.addVertex(vertex);
             } catch (GraphException | ListException e) {
                 e.printStackTrace();
             }
@@ -93,9 +91,9 @@ public class DijkstraController {
 
         for (int i = 0; i < maxEdges; i++) {
             List<Integer> vertexList = new ArrayList<>(vertices);
-            int src = vertexList.get(random.nextInt(vertexList.size())); // Obtiene un vértice de manera aleatoria
-            int dest = vertexList.get(random.nextInt(vertexList.size())); // Obtiene otro vértice de manera aleatoria
-            int weight = 200 + random.nextInt(801); // Peso aleatorio
+            int src = vertexList.get(random.nextInt(vertexList.size()));
+            int dest = vertexList.get(random.nextInt(vertexList.size()));
+            int weight = 200 + random.nextInt(801);
 
             try {
                 if (!graph.containsEdge(src, dest)) {
@@ -107,13 +105,13 @@ public class DijkstraController {
         }
 
         applyDijkstra();
-        drawGraph(); // Dibujar el grafo después de la aleatorización
+        drawGraph();
     }
 
     @FXML
     public void adjListOnAction() {
         try {
-            graph = new AdjacencyListGraph(15); // Inicializar grafo con capacidad para 100 vértices
+            graph = new AdjacencyListGraph(15); // Inicializar grafo con capacidad para 15 vértices
             UtilityFX.alert("List of Adjacency", "Adjacency List graph initialized!").show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +121,7 @@ public class DijkstraController {
 
     @FXML
     public void adjMatrixOnAction() {
-        graph = new AdjacencyMatrixGraph(15); // Inicializar grafo con capacidad para 100 vértices
+        graph = new AdjacencyMatrixGraph(15); // Inicializar grafo con capacidad para 15 vértices
         UtilityFX.alert("Adjacency Matrix", "Adjacency Matrix graph initialized!").show();
     }
 
@@ -220,39 +218,40 @@ public class DijkstraController {
                 Circle circle = new Circle(x, y, 20); // Tamaño del círculo
                 circle.setStyle("-fx-fill: lightblue; -fx-stroke: black;");
 
-                Text text = new Text(String.valueOf(i)); // Valor del vértice
+                Text text = new Text(String.valueOf(i + 1)); // Valor del vértice, ajustado para mostrar desde 1 en lugar de 0
                 text.setX(x - 5); // Ajustar posición del texto
                 text.setY(y + 5); // Ajustar posición del texto
 
-                vertexMap.put(i, circle);
+                vertexMap.put(i + 1, circle); // Guardar en el mapa con índices ajustados
                 midPane.getChildren().addAll(circle, text);
             }
 
             // Dibujar aristas
-            for (int i = 0; i < n; i++) {
+            for (int i = 1; i <= n; i++) {
                 List<Pair<Integer, Integer>> neighbors = graph.getNeighbors(i);
-                Circle sourceCircle = vertexMap.get(i);
+                Circle sourceCircle = vertexMap.get(i); // Obtener el vértice fuente ajustado
                 for (Pair<Integer, Integer> neighbor : neighbors) {
-                    int targetVertex = neighbor.getKey();
-                    Circle targetCircle = vertexMap.get(targetVertex);
+                    int targetIndex = neighbor.getKey();
+                    Circle targetCircle = vertexMap.get(targetIndex); // Obtener el vértice objetivo ajustado
 
-                    Line line = new Line(sourceCircle.getCenterX(), sourceCircle.getCenterY(),
-                            targetCircle.getCenterX(), targetCircle.getCenterY());
-                    line.setStrokeWidth(2); // Ajustar el ancho de la línea si es necesario
-                    midPane.getChildren().add(0, line); // Dibujar debajo de los vértices
+                    if (targetCircle != null) { // Verificar si el vértice objetivo es válido
+                        Line line = new Line(sourceCircle.getCenterX(), sourceCircle.getCenterY(),
+                                targetCircle.getCenterX(), targetCircle.getCenterY());
+                        line.setStrokeWidth(2); // Ajustar el ancho de la línea si es necesario
+                        midPane.getChildren().add(0, line); // Dibujar debajo de los vértices
 
-                    // Agregar etiquetas de peso de arista
-                    Text weightText = new Text(String.valueOf(neighbor.getValue()));
-                    weightText.setX((sourceCircle.getCenterX() + targetCircle.getCenterX()) / 2);
-                    weightText.setY((sourceCircle.getCenterY() + targetCircle.getCenterY()) / 2);
-                    weightText.setFill(Color.RED); // Cambiar color del peso a rojo
-                    midPane.getChildren().add(weightText);
+                        // Agregar etiquetas de peso de arista
+                        Text weightText = new Text(String.valueOf(neighbor.getValue()));
+                        weightText.setX((sourceCircle.getCenterX() + targetCircle.getCenterX()) / 2);
+                        weightText.setY((sourceCircle.getCenterY() + targetCircle.getCenterY()) / 2);
+                        weightText.setFill(Color.RED); // Cambiar color del peso a rojo
+                        midPane.getChildren().add(weightText);
+                    }
                 }
             }
         } catch (ListException | GraphException e) {
             e.printStackTrace();
         }
     }
+
 }
-
-

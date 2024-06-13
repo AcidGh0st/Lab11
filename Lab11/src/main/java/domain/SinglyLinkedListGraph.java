@@ -18,10 +18,13 @@ public class SinglyLinkedListGraph implements Graph {
     private LinkedStack stack;
     private LinkedQueue queue;
 
+
+
     //Constructor
     public SinglyLinkedListGraph() {
         initObjects();
     }
+
 
     private void initObjects() {
         this.vertexList = new SinglyLinkedList();
@@ -288,12 +291,20 @@ public class SinglyLinkedListGraph implements Graph {
                 Vertex targetVertex = (Vertex) vertexList.getNode(i).data;
                 EdgeWeight edgeWeight = getEdgeWeight(sourceVertex.data, targetVertex.data);
                 if (edgeWeight != null) {
-                    neighbors.add(new Pair<>(i, (int) edgeWeight.getWeight()));
+                    int weight = 0;
+                    try {
+                        weight = Integer.parseInt(edgeWeight.getWeight().toString());
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    neighbors.add(new Pair<>(i, weight));  // Usar el índice i directamente como identificador del vértice
                 }
             }
         }
         return neighbors;
     }
+
+
 
     private EdgeWeight getEdgeWeight(Object a, Object b) throws ListException {
         Vertex vertexA = findVertex(a);
