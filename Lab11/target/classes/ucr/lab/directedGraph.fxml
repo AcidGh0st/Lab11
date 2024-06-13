@@ -57,11 +57,11 @@
                   </Button>
                </children>
             </Pane>
-            <Pane fx:id="paneGraph" layoutX="275.0" layoutY="198.0" prefHeight="386.0" prefWidth="393.0" />
-            <Text fx:id="textMessage" layoutX="189.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="268.13671875" />
-            <ScrollPane layoutX="7.0" layoutY="196.0">
+            <Pane fx:id="paneGraph" layoutX="287.0" layoutY="221.0" prefHeight="363.0" prefWidth="381.0" />
+            <Text fx:id="textMessage" layoutX="168.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="288.80340576171875" />
+            <ScrollPane layoutY="221.0" prefHeight="363.0" prefWidth="287.0">
                <content>
-                  <TextArea fx:id="textArea" prefHeight="377.0" prefWidth="268.0" />
+                  <TextArea fx:id="textArea" prefHeight="358.0" prefWidth="284.0" />
                </content>
             </ScrollPane>
          </children>

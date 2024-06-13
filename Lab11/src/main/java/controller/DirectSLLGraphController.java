@@ -13,6 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
@@ -105,6 +106,14 @@ public class DirectSLLGraphController
                                 arrowY + arrowSize * Math.sin(angle - Math.toRadians(150))
                         });
                         arrow.setFill(javafx.scene.paint.Color.BLACK);
+
+                        line.setOnMouseMoved(event -> {
+                            line.setStroke(Color.	rgb(255, 105, 180));
+                            String message = "Edge between vertexes: [" + vertexName + "]......[" + targetVertexName + "]. Weight: " + edge.getWeight();
+                            textMessage.setText(message);
+
+                        });
+
                         paneGraph.getChildren().add(arrow);
                     }
                 }

@@ -222,7 +222,7 @@ public class LinkedGraphController {
                     line.setStrokeWidth(2); // Ajustar el ancho de la línea si es necesario
 
 
-                    line.setOnMouseClicked(event -> {
+                    line.setOnMouseEntered(event -> {
                         String message = "Edge between vertexes: [" + vertexName + "]......[" + targetVertex + "]. Weight: " + edge.getWeight();
                         textMessage.setText(message);
                     });
