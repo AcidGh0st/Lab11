@@ -327,7 +327,7 @@ public class DirectedSinglyLinkedListGraph implements Graph {
 
     }
 
-    private int indexOf(Object value) throws ListException {
+    public int indexOf(Object value) throws ListException {
         for (int i = 1; i <= vertexList.size(); i++) {
             Vertex vertex = (Vertex) vertexList.getNode(i).data;
             if (util.Utility.compare(vertex.data, value) == 0)

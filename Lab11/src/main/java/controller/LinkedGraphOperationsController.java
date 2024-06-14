@@ -1,5 +1,6 @@
 package controller;
 
+import domain.EdgeWeight;
 import domain.GraphException;
 import domain.SinglyLinkedListGraph;
 import domain.Vertex;
@@ -10,11 +11,11 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class LinkedGraphOperationsController {
     @javafx.fxml.FXML
@@ -25,35 +26,72 @@ public class LinkedGraphOperationsController {
     private TextArea textArea;
 
     private SinglyLinkedListGraph graph;
+    private Map<String, Circle> vertexMap; // Mapa para almacenar los vértices y sus posiciones
+    private String[] vertexNames;
+    private Random rand = new Random();
 
     @javafx.fxml.FXML
     public void initialize() {
         graph = new SinglyLinkedListGraph();
+        vertexMap = new HashMap<>();
+        vertexNames = new String[]{"Buda","Platón","Magno","Cleopatra","Jesús","Mahoma","Marco Polo","Galilei","Napoleón","Darwin",
+                "Einstein","Gandhi","Mandela","Ana Bolena","Cervantes","Dalí","Da Vinci","Shelley","Nefertiti","Ramsés",
+                "Tutankamón","Shakespeare","Mozart","Picasso","Van Gogh","Kalho","Verne","Allan Poe","Carrol","Cortázar"};
+        try {
+            initializeGraph();
+            if (!graph.isEmpty()) {
+                drawGraph(); // Dibujar el grafo si no está vacío
+            }
+        } catch (GraphException | ListException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeGraph() throws GraphException, ListException {
+        // Limpiar el grafo existente
+        graph.clear();
+
+        // Mezclar los nombres y seleccionar los primeros 10
+        List<String> namesList = Arrays.asList(vertexNames);
+        Collections.shuffle(namesList);
+        List<String> selectedNames = namesList.subList(0, 10);
+
+        // Inicializar el grafo con los vértices seleccionados
+        for (String vertex : selectedNames) {
+            graph.addVertex(vertex);
+        }
+
+        // Agregar aristas con conexiones aleatorias
+        Random random = new Random();
+        for (String vertex1 : selectedNames) {
+            for (String vertex2 : selectedNames) {
+                // Agregar una arista con una probabilidad del 30%
+                if (!vertex1.equals(vertex2) && random.nextDouble() < 0.3) {
+                    graph.addEdgeWeight(vertex1, vertex2, random.nextInt(1001) + 1000);
+                }
+            }
+        }
     }
 
     @javafx.fxml.FXML
     public void randomizeOnAction(ActionEvent actionEvent) {
-        Random rand = new Random();
-        Set<Integer> vertices = new HashSet<>();
-        //Arreglarlo con los nombres historicos
-        while (vertices.size() < 10) {
-            vertices.add(util.Utility.getRandom(100));
-        }
-
+        // Reinicializar el grafo con aristas y pesos aleatorios
         try {
-            graph.clear();
-            for (Integer v : vertices) {
-                graph.addVertex(v);
-            }
+            initializeGraph();
+            drawGraph(); // Redibujar el grafo
+        } catch (GraphException | ListException e) {
+            e.printStackTrace();
+        }
+    }
 
-            for (int i = 0; i < 10; i++) {
-                for (int j = i + 1; j < 10; j++) {
-                    if (rand.nextBoolean()) { // Decide aleatoriamente si se debe agregar una arista
-                        graph.addEdge(vertices.toArray()[i], vertices.toArray()[j]);
-                    }
-                }
-            }
+    @javafx.fxml.FXML
+    public void addVertexOnAction(ActionEvent actionEvent) {
+        try {
+            // Seleccionar un nombre aleatorio del arreglo vertexNames
+            int index = rand.nextInt(vertexNames.length);
+            String vertexName = vertexNames[index];
 
+            graph.addVertex(vertexName);
             drawGraph();
             updateTextArea();
         } catch (GraphException | ListException e) {
@@ -62,12 +100,34 @@ public class LinkedGraphOperationsController {
     }
 
     @javafx.fxml.FXML
-    public void addVertexOnAction(ActionEvent actionEvent) {
+    public void addEdgesOnAction(ActionEvent actionEvent) {
         try {
-            //Arreglarlo con los nombres historicos
-            Object vertex = util.Utility.getRandom(100);
+            if (graph.size() < 2) {
+                showAlert("Not enough vertices to add an edge.");
+                return;
+            }
 
-            graph.addVertex(vertex);
+            int indexA = util.Utility.getRandom(graph.size());
+            int indexB = util.Utility.getRandom(graph.size());
+
+            //Asegura que no se conecten el mismo vértice
+            while (indexA == indexB) {
+                indexB = util.Utility.getRandom(graph.size());
+            }
+
+            Vertex vertexA = graph.getVertex(indexA);
+            Vertex vertexB = graph.getVertex(indexB);
+
+            //Verificación adicional para asegurar que los vértices no sean nulos
+            if (vertexA == null || vertexB == null) {
+                //Coment del profe: Failed to retrieve valid vértices. El último vértice no lo remueve
+                showAlert("Failed to retrieve valid vertices.");
+                return;
+            }
+
+            Object weight = 1000 + util.Utility.getRandom(2001); //Peso entre 1000 y 2000
+
+            graph.addEdgeWeight(vertexA.data, vertexB.data, weight);
             drawGraph();
             updateTextArea();
         } catch (GraphException | ListException e) {
@@ -140,41 +200,7 @@ public class LinkedGraphOperationsController {
         }
     }
 
-    @javafx.fxml.FXML
-    public void addEdgesOnAction(ActionEvent actionEvent) {
-        try {
-            if (graph.size() < 2) {
-                showAlert("Not enough vertices to add an edge.");
-                return;
-            }
 
-            int indexA = util.Utility.getRandom(graph.size());
-            int indexB = util.Utility.getRandom(graph.size());
-
-            //Asegura que no se conecten el mismo vértice
-            while (indexA == indexB) {
-                indexB = util.Utility.getRandom(graph.size());
-            }
-
-            Vertex vertexA = graph.getVertex(indexA);
-            Vertex vertexB = graph.getVertex(indexB);
-
-            //Verificación adicional para asegurar que los vértices no sean nulos
-            if (vertexA == null || vertexB == null) {
-                //Coment del profe: Failed to retrieve valid vértices. El último vértice no lo remueve
-                showAlert("Failed to retrieve valid vertices.");
-                return;
-            }
-
-            Object weight = 100 + util.Utility.getRandom(101); //Peso entre 100 y 200
-
-            graph.addEdgeWeight(vertexA.data, vertexB.data, weight);
-            drawGraph();
-            updateTextArea();
-        } catch (GraphException | ListException e) {
-            showAlert(e.getMessage());
-        }
-    }
 
     @javafx.fxml.FXML
     public void clearOnAction(ActionEvent actionEvent) {
@@ -196,50 +222,76 @@ public class LinkedGraphOperationsController {
             alert.setHeaderText(null);
             alert.setContentText("Singly Linked List Graph has been cleared.");
             alert.showAndWait();
-            updateTextArea();
+            try {
+                if (!graph.isEmpty()) {
+                    drawGraph(); // Dibujar el grafo si no está vacío después de limpiar
+                }
+                updateTextArea();
+            } catch (ListException | GraphException e) {
+                showAlert("Error drawing graph after clearing: " + e.getMessage());
+            }
         }
     }
 
-    private void drawGraph() throws ListException {
+    private void drawGraph() throws ListException, GraphException {
         paneGraph.getChildren().clear();
-        double radius = 200;
-        double centerX = paneGraph.getWidth() / 2;
-        double centerY = paneGraph.getHeight() / 2;
+        vertexMap.clear();
 
-        double[] vertexX = new double[graph.size()];
-        double[] vertexY = new double[graph.size()];
+        try {
+            if (graph == null || graph.isEmpty()) {
+                System.out.println("No hay vértices para dibujar.");
+                return;
+            }
+            int n = graph.size();
 
-        for (int i = 0; i < graph.size(); i++) {
-            double angle = 2 * Math.PI * i / graph.size();
-            vertexX[i] = centerX + radius * Math.cos(angle);
-            vertexY[i] = centerY + radius * Math.sin(angle);
-        }
+            // Verificar si no hay vértices en el grafo
+            if (n == 0) {
+                System.out.println("No hay vértices para dibujar.");
+                return;
+            }
 
-        for (int i = 0; i < graph.size(); i++) {
-            for (int j = i + 1; j < graph.size(); j++) {
-                if (!graph.getSinglyLinkedList()[i][j].equals(0)) {
-                    javafx.scene.shape.Line line = new javafx.scene.shape.Line();
-                    line.setStartX(vertexX[i]);
-                    line.setStartY(vertexY[i]);
-                    line.setEndX(vertexX[j]);
-                    line.setEndY(vertexY[j]);
-                    paneGraph.getChildren().add(line);
+            // Dibujar vértices
+            double paneWidth = paneGraph.getWidth();
+            double paneHeight = paneGraph.getHeight();
+            double centerX = paneWidth / 2;
+            double centerY = paneHeight / 2;
+            double radius = Math.min(paneWidth, paneHeight) / 3;
+            double angleStep = 2 * Math.PI / n;
+
+            for (int i = 1; i <= n; i++) {
+                Vertex vertex = graph.getVertex(i);
+                String vertexName = vertex.getData().toString();
+                double angle = i * angleStep;
+                double x = centerX + radius * Math.cos(angle);
+                double y = centerY + radius * Math.sin(angle);
+
+                Circle circle = new Circle(x, y, 20); // Aumentar el tamaño del círculo si es necesario
+                circle.setStyle("-fx-fill: lightblue; -fx-stroke: black;");
+                Text text = new Text(x - 10, y + 5, vertexName);
+
+                vertexMap.put(vertexName, circle);
+                paneGraph.getChildren().addAll(circle, text);
+            }
+
+            // Dibujar aristas después de los vértices
+            for (int i = 1; i <= n; i++) {
+                Vertex vertex = graph.getVertex(i);
+                String vertexName = vertex.getData().toString();
+                for (int j = 1; j <= vertex.edgesList.size(); j++) {
+                    EdgeWeight edge = (EdgeWeight) vertex.edgesList.getNode(j).data;
+                    String targetVertex = edge.getEdge().toString(); // Acceder al vértice destino de la arista
+                    Circle sourceCircle = vertexMap.get(vertexName);
+                    Circle targetCircle = vertexMap.get(targetVertex);
+
+                    Line line = new Line(sourceCircle.getCenterX(), sourceCircle.getCenterY(),
+                            targetCircle.getCenterX(), targetCircle.getCenterY());
+                    line.setStrokeWidth(2); // Ajustar el ancho de la línea si es necesario
+                    paneGraph.getChildren().add(0, line); // Agregar la línea al principio para que se dibuje debajo de los vértices
                 }
             }
-        }
-
-        for (int i = 0; i < graph.size(); i++) {
-            javafx.scene.shape.Circle circle = new javafx.scene.shape.Circle();
-            circle.setCenterX(vertexX[i]);
-            circle.setCenterY(vertexY[i]);
-            circle.setRadius(15);
-            circle.setStyle("-fx-fill: lightblue; -fx-stroke: black;");
-
-            Text text = new Text(String.valueOf(graph.getVertex(i).data));
-            text.setX(vertexX[i] - 5);
-            text.setY(vertexY[i] + 5);
-
-            paneGraph.getChildren().addAll(circle, text);
+        } catch (ListException e) {
+            System.out.println("Error al acceder a la lista en el grafo: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
